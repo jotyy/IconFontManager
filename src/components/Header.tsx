@@ -1,6 +1,6 @@
 import React from 'react';
-import { Box, Button, Heading } from 'grommet';
-import { Notification } from 'grommet-icons';
+import { Box, Heading, TextInput } from 'grommet';
+import { FormSearch } from 'grommet-icons';
 
 export const Header: React.FC = () => {
     return (
@@ -15,9 +15,21 @@ export const Header: React.FC = () => {
             style={{ zIndex: 'initial' }}
         >
             <Heading level="3" margin="none">
-                IconFont Manager
+                IconFont System
             </Heading>
-            <Button icon={<Notification />} />
+            <Box direction="row" align="center">
+                <Box
+                    margin={{ left: 'medium' }}
+                    round="xsmall"
+                    background={{ color: 'white', opacity: 'weak' }}
+                    direction="row"
+                    align="center"
+                    pad={{ horizontal: 'small' }}
+                >
+                    <FormSearch color="white" />
+                    <TextInput plain placeholder="Search" type="search" />
+                </Box>
+            </Box>
         </Box>
     );
 };

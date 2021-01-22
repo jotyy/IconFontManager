@@ -1,31 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Collapsible, Grommet, Layer, ResponsiveContext } from 'grommet';
-import { FormClose } from 'grommet-icons';
-import { Header } from './components/Header';
+import { Box, Grid, Grommet } from 'grommet';
 import opentype from 'opentype.js';
 import { FontCard } from './components/FontCard';
-
-const theme = {
-    global: {
-        colors: {
-            brand: '#228BE6',
-        },
-        font: {
-            family: 'Roboto',
-            size: '18px',
-            height: '20px',
-        },
-    },
-};
+import './App.css';
+import { Header } from './components/Header';
 
 export interface GlyphType {
     index: number;
+    name: string;
     unicode: string;
     path: string;
 }
 
 const App: React.FC = () => {
-    const [showSidebar, setShowSidebar] = useState(false);
     const [data, setData] = useState<Array<GlyphType>>([]);
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -38,6 +25,7 @@ const App: React.FC = () => {
             for (let i = 0; i < glyphs?.length; i++) {
                 data[i] = {
                     index: glyphs.get(i).index,
+                    name: glyphs.get(i).name,
                     unicode: glyphs.get(i).unicode.toString(16),
                     path: glyphs.get(i).getPath().toSVG(2),
                 };
@@ -46,45 +34,21 @@ const App: React.FC = () => {
         }
     }, [data]);
     return (
-        <Grommet theme={theme} full themeMode="dark">
-            <ResponsiveContext.Consumer>
-                {(size) => (
-                    <Box fill>
-                        <Header />
-                        <Box direction="row" flex overflow={{ horizontal: 'hidden' }}>
-                            <Box flex direction={'row'} wrap={true} pad={'medium'} justify={'center'}>
-                                {data.length > 0 &&
-                                    data.map((value) => (
-                                        <FontCard key={value.index} unicode={value.unicode} path={value.path} />
-                                    ))}
-                            </Box>
-                            {!showSidebar || size !== 'small' ? (
-                                <Collapsible direction="horizontal" open={showSidebar}>
-                                    <Box
-                                        flex
-                                        width="medium"
-                                        background="light-2"
-                                        elevation="small"
-                                        align="center"
-                                        justify="center"
-                                    >
-                                        sidebar
-                                    </Box>
-                                </Collapsible>
-                            ) : (
-                                <Layer>
-                                    <Box background="light-2" tag="header" align="center" justify="end" direction="row">
-                                        <Button icon={<FormClose />} onClick={() => setShowSidebar(false)} />
-                                    </Box>
-                                    <Box fill background="light-2" align="center" justify="center">
-                                        sidebar
-                                    </Box>
-                                </Layer>
-                            )}
-                        </Box>
-                    </Box>
-                )}
-            </ResponsiveContext.Consumer>
+        <Grommet full themeMode="dark">
+            <Box fill flex direction="column">
+                <Header />
+                <Grid
+                    justifyContent={'between'}
+                    columns={'small'}
+                    gap={{ row: 'none', column: 'medium' }}
+                    pad={'medium'}
+                >
+                    {data.length > 0 &&
+                        data.map((value) => (
+                            <FontCard key={value.index} name={value.name} unicode={value.unicode} path={value.path} />
+                        ))}
+                </Grid>
+            </Box>
         </Grommet>
     );
 };

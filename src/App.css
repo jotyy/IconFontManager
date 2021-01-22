@@ -1,0 +1,5 @@
+.grid-view {
+    display: grid;
+    justify-content: space-between;
+    gap: 20px;
+}
